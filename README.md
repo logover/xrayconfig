@@ -1,4 +1,4 @@
-# xrayconfig
+# xray+config
 Three modes coexist with wordpress configuration:
 xray+xtls
 xray+vless+tls+ws
