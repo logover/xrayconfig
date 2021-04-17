@@ -1,0 +1,104 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "port": 443,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "84376b2f-8992-482d-8c0f-3446735ca8ed",
+                        "flow": "xtls-rprx-direct"
+                    }
+                ],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": 50000,
+                        "alpn": "",
+                        "xver": 1
+                    },
+                    {
+                        "dest": 50001,
+                        "alpn": "h2",
+                        "xver": 1
+                    },
+                    {
+                        "dest": 50002,
+                        "path": "/vlessws/",
+                        "xver": 1
+                    },
+                    {
+                        "path": "/vmessws/",
+                        "dest": 50003,
+                        "xver": 1
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "xtls",
+                "xtlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/ssl/certs/nginx.cer",
+                            "keyFile": "/etc/ssl/private/nginx.key"
+                        }
+                    ]
+                }
+            }                 
+        },
+        {
+            "port": 50002,
+            "listen": "127.0.0.1",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "84376b2f-8992-482d-8c0f-3446735ca8ed"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vlessws/"
+                }
+            }
+        },
+        {
+            "port": 50003,
+            "listen": "127.0.0.1",
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "84376b2f-8992-482d-8c0f-3446735ca8ed"
+                    }
+                ]
+            },
+            "streamSettings": {
+            "network": "ws",
+            "security": "none",
+            "wsSettings": {
+                "acceptProxyProtocol": true,
+                "path": "/vmessws/"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+}
+
